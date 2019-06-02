@@ -232,6 +232,8 @@
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Home\GetAll.cshtml" />
+    <Content Include="Views\Home\EditHouseHold.cshtml" />
+    <Content Include="Views\Home\InviteUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

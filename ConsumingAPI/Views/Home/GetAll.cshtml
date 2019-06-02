@@ -3,20 +3,15 @@
     ViewBag.Title = "GetAll";
 }
 
-<h2>GetAll</h2>
 <div>
     <section class="section-padding wow fadeInUp delay-05s">
         <div class="container" style="margin-left: 10px;">
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <h2 class="service-title pad-bt15">Latest Project</h2>
+                    <h2 class="service-title pad-bt15">Latest HouseHold</h2>
                     <hr class="bottom-line">
                 </div>
-                @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
-                {
-                    <a href="@Url.Action("CreateProject", "Projects")">Create</a>
-                }
-
+                <a href="@Url.Action("CreateHouseHold","Home")">Create</a>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -25,9 +20,10 @@
                             <th>DateCreated</th>
                             <th>DateUpdated</th>
                             <th>Owner</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
+                            <th>Edit</th>
+                            <th>InviteUsers</th>
+                            <th>Join household</th>
+                            <th>Delete/Leave</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -35,31 +31,26 @@
                         {
                             <tr>
                                 <td>@record.Name</td>
-                                <td>@record.Description</td>      
+                                <td>@record.Description</td>
                                 <td>@record.DateCreated</td>
                                 <td>@record.DateUpdated</td>
                                 <td>@record.OwnerId</td>
-                                @*<td>                                   
-                                        <a href="@Url.Action("Edit", "Projects", new { id = record.Id })">Edit</a>                                  
+                                <td>
+                                    <a href="@Url.Action("Edit", "Home", new { id = record.Id })">Edit</a>
                                 </td>
                                 <td>
-                                    @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
-                                    {
-                                        <a href="@Url.Action("EditMembers", "Projects", new { id = record.Id })">Edit Members</a>
-                                    }
+                                    <a href="@Url.Action("InviteUsers", "Home", new { id = record.Id })">Invite Users</a>
                                 </td>
                                 <td>
-                                    @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
-                                    {
-                                        <form method="post" action="@Url.Action("Delete", "Projects", new { id = record.Id })">
-                                            <button>Delete</button>
-                                        </form>
-                                        <br />
-                                        <form method="post" action="@Url.Action("Archive", "Projects", new { id = record.Id })">
-                                            <button>Archive</button>
-                                        </form>
-                                    }
-                                </td>*@
+                                    <form method="post" action="@Url.Action("JoinHouseHold", "Home", new { id = record.Id })">
+                                        <button>Join HouseHold</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form method="post" action="@Url.Action("Delete", "Home", new { id = record.Id })">
+                                         <button>Delete/LeaveHouseHold</button>
+                                    </form>
+                                </td>
                             </tr>
                         }
                     </tbody>
