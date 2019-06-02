@@ -1,0 +1,115 @@
+﻿@model LoginViewModel
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+
+<!--
+author: W3layouts
+author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Furnish Interior Category Flat Bootstrap Responsive Web Template | Login Page :: w3layouts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="keywords" content=" Furnish Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template,
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+
+    <script>
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+
+    <!-- css files -->
+    <link href="~/css/bootstrap.css" rel='stylesheet' type='text/css' /><!-- bootstrap css -->
+    <link href="~/css/style.css" rel='stylesheet' type='text/css' /><!-- custom css -->
+    <link href="~/css/font-awesome.min.css" rel="stylesheet"><!-- fontawesome css -->
+    <!-- //css files -->
+    <!-- google fonts -->
+    <link href="//fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i&amp;subset=latin-ext" rel="stylesheet">
+    <!-- //google fonts -->
+
+</head>
+<body>
+
+
+    <!-- inner banner -->
+    <section class="inner-banner">
+        <div class="container">
+        </div>
+    </section>
+    <!-- //inner banner -->
+    <!-- page details -->
+    <div class="breadcrumb-agile mt-4">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index","Home")">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page"> Login Page</li>
+            </ol>
+        </div>
+    </div>
+    <!-- //page details -->
+    <!-- login -->
+    <section class="login py-5">
+        <div class="container">
+            <h3 class="heading mb-sm-5 mb-4 text-center">Login To Your Account</h3>
+
+            <div class="login-form">
+                <form action="@Url.Action("Login", "Account")" method="post">
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    <div class="row">
+                        <div class="col-md-4 text-md-right">
+                            <label>Username or email:</label>
+                        </div>
+                        <div class="col-md-8">
+                            @Html.TextBoxFor(input => input.UserName, new { @class = "form-control", placeholder = "Enter username or email id", required = "" })
+                            @Html.ValidationMessageFor(input => input.UserName)
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-4 text-md-right">
+                            <label>Password:</label>
+                        </div>
+                        <div class="col-md-8">
+                            @Html.PasswordFor(input => input.Password, new { @class = "form-control", placeholder = "Enter your Password", required = "" })
+                            @Html.ValidationMessageFor(input => input.Password)
+                            @*<input type="password" placeholder="Enter your Password" required="">*@
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-4 text-md-right">
+                            <label class="checkbox"><input type="checkbox" name="checkbox" checked=""> Remember Me</label>
+                        </div>
+                        <div class="col-md-8">
+                            <a href="@Url.Action("ForgotPassword", "Account")">Forgot Your Password?</a>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-8 offset-md-4">
+                            <button class="btn">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </section>
+    <!-- //login -->
+    <!-- move top icon -->
+    <a href="#home" class="move-top text-center"></a>
+    <!-- //move top icon -->
+
+</body>
+</html>
