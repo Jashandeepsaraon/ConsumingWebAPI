@@ -53,13 +53,16 @@ namespace ConsumingAPI.Controllers
             var response = httpClient.GetAsync(url).Result;
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
+                //Read the response
+                var data = response.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<List<HouseholdsViewModel>>(data);
                 return View();
                 //return RedirectToAction(nameof(HomeController.GetAll));
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                var data1 = response.Content.ReadAsStringAsync().Result;
-                var result1 = JsonConvert.DeserializeObject<APIErroData>(data1);
+                var data = response.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<List<HouseholdsViewModel>>(data);
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
@@ -67,7 +70,6 @@ namespace ConsumingAPI.Controllers
             }
             return View();
         }
-
 
         [HttpGet]
         public ActionResult CreateHouseHold()
@@ -182,8 +184,8 @@ namespace ConsumingAPI.Controllers
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                var data1 = response.Content.ReadAsStringAsync().Result;
-                var result1 = JsonConvert.DeserializeObject<APIErroData>(data1);
+                var data = response.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<APIErroData>(data);
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
@@ -215,12 +217,14 @@ namespace ConsumingAPI.Controllers
             var response = httpClient.GetAsync(url).Result;
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
+                var data = response.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<APIErroData>(data);
                 return View();
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                var data1 = response.Content.ReadAsStringAsync().Result;
-                var result1 = JsonConvert.DeserializeObject<APIErroData>(data1);
+                var data = response.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<APIErroData>(data);
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
@@ -257,12 +261,14 @@ namespace ConsumingAPI.Controllers
             var response = httpClient.GetAsync(url).Result;
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
+                var data = response.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<APIErroData>(data);
                 return View();
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                var data1 = response.Content.ReadAsStringAsync().Result;
-                var result1 = JsonConvert.DeserializeObject<APIErroData>(data1);
+                var data = response.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<APIErroData>(data);
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
@@ -298,12 +304,14 @@ namespace ConsumingAPI.Controllers
             }
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
+                var data = response.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<APIErroData>(data);
                 return View();
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                var data1 = response.Content.ReadAsStringAsync().Result;
-                var result1 = JsonConvert.DeserializeObject<APIErroData>(data1);
+                var data = response.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<APIErroData>(data);
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
@@ -339,12 +347,14 @@ namespace ConsumingAPI.Controllers
             }
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
+                var data = response.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<APIErroData>(data);
                 return View();
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                var data1 = response.Content.ReadAsStringAsync().Result;
-                var result1 = JsonConvert.DeserializeObject<APIErroData>(data1);
+                var data = response.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<APIErroData>(data);
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
