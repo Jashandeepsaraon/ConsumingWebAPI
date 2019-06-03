@@ -270,23 +270,20 @@ namespace ConsumingAPI.Controllers
             }
 
             var token = cookie.Value;
-            var url = "http://localhost:49995/api/Households/InviteUsers/{id}?email={email}";
             var email = model.Email;
-            var parameters = new List<KeyValuePair<string, string>>();
-            parameters.Add(new KeyValuePair<string, string>("Email", email));
 
-            var encodedValues = new FormUrlEncodedContent(parameters);
+            var url = $"http://localhost:49995/api/Households/InviteUsers/{id}?email={email}";         
             // HttpClient object to handle the comunication
             var httpClient = new HttpClient();
 
             httpClient.DefaultRequestHeaders.Add("Authorization",
                 $"Bearer {token}");
-            var response = httpClient.PostAsync(url, encodedValues).Result;
+            var response = httpClient.PostAsync(url, null).Result;
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
                 var result = JsonConvert.DeserializeObject<InviteUsersViewModel>(data);
-                return View();
+                return View(result);
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
@@ -327,7 +324,7 @@ namespace ConsumingAPI.Controllers
             {
                 var data = response.Content.ReadAsStringAsync().Result;
                 var result = JsonConvert.DeserializeObject<InviteUsersViewModel>(data);
-                return View();
+                return View(result);
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
@@ -370,7 +367,7 @@ namespace ConsumingAPI.Controllers
             {
                 var data = response.Content.ReadAsStringAsync().Result;
                 var result = JsonConvert.DeserializeObject<HouseholdsViewModel>(data);
-                return View();
+                return View(result);
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
