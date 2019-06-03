@@ -132,8 +132,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ChangePasswordViewModel.cs" />
+    <Compile Include="Models\DisplayUsersViewModel.cs" />
     <Compile Include="Models\Domain\APIErroData.cs" />
     <Compile Include="Models\Domain\Households.cs" />
+    <Compile Include="Models\Domain\InviteUsersViewModel.cs" />
     <Compile Include="Models\ForgotPasswordViewModel.cs" />
     <Compile Include="Models\HouseholdsViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
@@ -234,6 +236,7 @@
     <Content Include="Views\Home\GetAll.cshtml" />
     <Content Include="Views\Home\EditHouseHold.cshtml" />
     <Content Include="Views\Home\InviteUsers.cshtml" />
+    <Content Include="Views\Home\DisplayUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

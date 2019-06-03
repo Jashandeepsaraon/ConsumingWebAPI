@@ -1,0 +1,36 @@
+﻿@model List<DisplayUsersViewModel>
+@{
+    ViewBag.Title = "DisplayUsers";
+}
+
+<div>
+    <section class="section-padding wow fadeInUp delay-05s">
+        <div class="container" style="margin-left: 10px;">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h2 class="service-title pad-bt15">Latest Users List</h2>
+                    <hr class="bottom-line">
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th></th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var record in Model)
+                        {
+                            <tr>
+                                <td>@record.Users</td>
+                                <td></td>                                
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+

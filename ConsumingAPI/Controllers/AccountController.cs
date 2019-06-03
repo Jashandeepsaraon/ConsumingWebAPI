@@ -213,13 +213,13 @@ namespace ConsumingAPI.Controllers
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                var data1 = response.Content.ReadAsStringAsync().Result;
-                var result1 = JsonConvert.DeserializeObject<APIErroData>(data1);
+                var data = response.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<APIErroData>(data);
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
-                var data1 = response.Content.ReadAsStringAsync().Result;
-                var result1 = JsonConvert.DeserializeObject<APIErroData>(data1);
+                var data = response.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<APIErroData>(data);
                 return View("Error");
             }
             return RedirectToAction(nameof(AccountController.LogOut));

@@ -56,13 +56,52 @@ namespace ConsumingAPI.Controllers
                 //Read the response
                 var data = response.Content.ReadAsStringAsync().Result;
                 var result = JsonConvert.DeserializeObject<List<HouseholdsViewModel>>(data);
+                return View(result);
+                //return RedirectToAction(nameof(HomeController.GetAll));
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                var data = response.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<APIErroData>(data);
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+            {
+                return View("Error");
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult GetById(int id)
+        {
+            var cookie = Request.Cookies["MyFirstCookie"];
+
+            if (cookie == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var token = cookie.Value;
+
+            var url = "http://localhost:49995/api/Households/{id}";
+
+            // HttpClient object to handle the comunication
+            var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("Authorization",
+                $"Bearer {token}");
+            var response = httpClient.GetAsync(url).Result;
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                //Read the response
+                var data = response.Content.ReadAsStringAsync().Result;
+                var result = JsonConvert.DeserializeObject<HouseholdsViewModel>(data);
                 return View();
                 //return RedirectToAction(nameof(HomeController.GetAll));
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
-                var result = JsonConvert.DeserializeObject<List<HouseholdsViewModel>>(data);
+                var result = JsonConvert.DeserializeObject<APIErroData>(data);
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
             {
@@ -172,7 +211,7 @@ namespace ConsumingAPI.Controllers
             var encodedParameters = new FormUrlEncodedContent(parameters);
 
             //Calling the API and storing the response
-            var response = httpClient.PostAsync(url, encodedParameters).Result;
+            var response = httpClient.PutAsync(url, encodedParameters).Result;
 
             if (response.StatusCode == System.Net.HttpStatusCode.Created)
             {
@@ -218,8 +257,8 @@ namespace ConsumingAPI.Controllers
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
-                var result = JsonConvert.DeserializeObject<APIErroData>(data);
-                return View();
+                var result = JsonConvert.DeserializeObject<List<DisplayUsersViewModel>>(data);
+                return View(result);
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
@@ -240,7 +279,7 @@ namespace ConsumingAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult InviteUsers(int? id)
+        public ActionResult InviteUsers(int? id, InviteUsersViewModel model)
         {
             var cookie = Request.Cookies["MyFirstCookie"];
 
@@ -250,19 +289,22 @@ namespace ConsumingAPI.Controllers
             }
 
             var token = cookie.Value;
-
             var url = "http://localhost:49995/api/Households/InviteUsers/{id}?email={email}";
+            var email = model.Email;
+            var parameters = new List<KeyValuePair<string, string>>();
+            parameters.Add(new KeyValuePair<string, string>("Email", email));
 
+            var encodedValues = new FormUrlEncodedContent(parameters);
             // HttpClient object to handle the comunication
             var httpClient = new HttpClient();
 
             httpClient.DefaultRequestHeaders.Add("Authorization",
                 $"Bearer {token}");
-            var response = httpClient.GetAsync(url).Result;
+            var response = httpClient.PostAsync(url, encodedValues).Result;
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
-                var result = JsonConvert.DeserializeObject<APIErroData>(data);
+                var result = JsonConvert.DeserializeObject<InviteUsersViewModel>(data);
                 return View();
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
@@ -290,10 +332,8 @@ namespace ConsumingAPI.Controllers
             var token = cookie.Value;
 
             var url = "http://localhost:49995/api/Households/JoinHousehold/{id}";
-
             // HttpClient object to handle the comunication
             var httpClient = new HttpClient();
-
             httpClient.DefaultRequestHeaders.Add("Authorization",
                 $"Bearer {token}");
             var response = httpClient.GetAsync(url).Result;
@@ -305,7 +345,7 @@ namespace ConsumingAPI.Controllers
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
-                var result = JsonConvert.DeserializeObject<APIErroData>(data);
+                var result = JsonConvert.DeserializeObject<InviteUsersViewModel>(data);
                 return View();
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
@@ -339,7 +379,7 @@ namespace ConsumingAPI.Controllers
 
             httpClient.DefaultRequestHeaders.Add("Authorization",
                 $"Bearer {token}");
-            var response = httpClient.GetAsync(url).Result;
+            var response = httpClient.DeleteAsync(url).Result;
             if (!response.IsSuccessStatusCode)
             {
                 ModelState.AddModelError("", "You are not Invited to this HouseHold.");
@@ -348,7 +388,7 @@ namespace ConsumingAPI.Controllers
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
-                var result = JsonConvert.DeserializeObject<APIErroData>(data);
+                var result = JsonConvert.DeserializeObject<HouseholdsViewModel>(data);
                 return View();
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)

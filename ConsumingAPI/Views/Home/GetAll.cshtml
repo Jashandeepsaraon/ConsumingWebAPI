@@ -11,7 +11,7 @@
                     <h2 class="service-title pad-bt15">Latest HouseHold</h2>
                     <hr class="bottom-line">
                 </div>
-                <a href="@Url.Action("CreateHouseHold","Home")">Create</a>
+                <a href="@Url.Action("CreateHouseHold","Home")">+ Create New</a>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -23,6 +23,7 @@
                             <th>Edit</th>
                             <th>InviteUsers</th>
                             <th>Join household</th>
+                            <th>Users List</th>
                             <th>Delete/Leave</th>
                         </tr>
                     </thead>
@@ -36,7 +37,7 @@
                                 <td>@record.DateUpdated</td>
                                 <td>@record.OwnerId</td>
                                 <td>
-                                    <a href="@Url.Action("Edit", "Home", new { id = record.Id })">Edit</a>
+                                    <a href="@Url.Action("EditHouseHold", "Home", new { id = record.Id })">Edit</a>
                                 </td>
                                 <td>
                                     <a href="@Url.Action("InviteUsers", "Home", new { id = record.Id })">Invite Users</a>
@@ -47,8 +48,13 @@
                                     </form>
                                 </td>
                                 <td>
+                                    <form method="post" action="@Url.Action("DisplayUsers", "Home", new { id = record.Id })">
+                                        <button>Users</button>
+                                    </form>
+                                </td>
+                                <td>
                                     <form method="post" action="@Url.Action("Delete", "Home", new { id = record.Id })">
-                                         <button>Delete/LeaveHouseHold</button>
+                                        <button>Delete/LeaveHouseHold</button>
                                     </form>
                                 </td>
                             </tr>
