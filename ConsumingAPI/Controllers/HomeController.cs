@@ -282,7 +282,7 @@ namespace ConsumingAPI.Controllers
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
-                var result = JsonConvert.DeserializeObject<InviteUsersViewModel>(data);
+                var result = JsonConvert.DeserializeObject<List<InviteUsersViewModel>>(data);
                 return View(result);
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
