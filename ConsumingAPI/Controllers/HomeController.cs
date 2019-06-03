@@ -72,45 +72,6 @@ namespace ConsumingAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetById(int id)
-        {
-            var cookie = Request.Cookies["MyFirstCookie"];
-
-            if (cookie == null)
-            {
-                return RedirectToAction("Index");
-            }
-
-            var token = cookie.Value;
-
-            var url = "http://localhost:49995/api/Households/{id}";
-
-            // HttpClient object to handle the comunication
-            var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Add("Authorization",
-                $"Bearer {token}");
-            var response = httpClient.GetAsync(url).Result;
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                //Read the response
-                var data = response.Content.ReadAsStringAsync().Result;
-                var result = JsonConvert.DeserializeObject<HouseholdsViewModel>(data);
-                return View();
-                //return RedirectToAction(nameof(HomeController.GetAll));
-            }
-            else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-            {
-                var data = response.Content.ReadAsStringAsync().Result;
-                var result = JsonConvert.DeserializeObject<APIErroData>(data);
-            }
-            else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-            {
-                return View("Error");
-            }
-            return View();
-        }
-
-        [HttpGet]
         public ActionResult CreateHouseHold()
         {
             return View();
@@ -158,6 +119,7 @@ namespace ConsumingAPI.Controllers
 
                 //Convert the data back into an object
                 var result = JsonConvert.DeserializeObject<Households>(data);
+                return View(result);
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
@@ -173,9 +135,28 @@ namespace ConsumingAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult EditHouseHold()
+        public ActionResult EditHouseHold(int? id)
         {
-            return View();
+            var cookie = Request.Cookies["MyFirstCookie"];
+
+            if (cookie == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var token = cookie.Value;
+
+            var url = $"http://localhost:49995/api/Households/{id}";
+
+            // HttpClient object to handle the comunication
+            var httpClient = new HttpClient();
+
+            httpClient.DefaultRequestHeaders.Add("Authorization",
+                $"Bearer {token}");
+            var response = httpClient.GetAsync(url).Result;
+            var data = response.Content.ReadAsStringAsync().Result;
+            var result = JsonConvert.DeserializeObject<HouseholdsViewModel>(data);
+            return View(result);
         }
 
         [HttpPost]
@@ -190,7 +171,7 @@ namespace ConsumingAPI.Controllers
 
             var token = cookie.Value;
 
-            var url = "http://localhost:49995/api/Households/{id}";
+            var url = $"http://localhost:49995/api/Households/{id}";
 
             // HttpClient object to handle the comunication
             var httpClient = new HttpClient();
@@ -213,14 +194,14 @@ namespace ConsumingAPI.Controllers
             //Calling the API and storing the response
             var response = httpClient.PutAsync(url, encodedParameters).Result;
 
-            if (response.StatusCode == System.Net.HttpStatusCode.Created)
-            {
+             if (response.StatusCode == System.Net.HttpStatusCode.Created)
+             {
                 //Read the response
                 var data = response.Content.ReadAsStringAsync().Result;
 
                 //Convert the data back into an object
                 var result = JsonConvert.DeserializeObject<Households>(data);
-            }
+             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
@@ -246,7 +227,7 @@ namespace ConsumingAPI.Controllers
 
             var token = cookie.Value;
 
-            var url = "http://localhost:49995/api/Households/DisplayUsers/{id}";
+            var url = $"http://localhost:49995/api/Households/DisplayUsers/{id}";
 
             // HttpClient object to handle the comunication
             var httpClient = new HttpClient();
@@ -331,7 +312,7 @@ namespace ConsumingAPI.Controllers
 
             var token = cookie.Value;
 
-            var url = "http://localhost:49995/api/Households/JoinHousehold/{id}";
+            var url = $"http://localhost:49995/api/Households/JoinHousehold/{id}";
             // HttpClient object to handle the comunication
             var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Add("Authorization",
@@ -372,7 +353,7 @@ namespace ConsumingAPI.Controllers
 
             var token = cookie.Value;
 
-            var url = "http://localhost:49995/api/Households/{id}";
+            var url = $"http://localhost:49995/api/Households/{id}";
 
             // HttpClient object to handle the comunication
             var httpClient = new HttpClient();
