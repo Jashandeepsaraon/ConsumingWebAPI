@@ -48,7 +48,7 @@ namespace ConsumingAPI.Controllers
             {
                 //Create a log for the error message
                 ModelState.AddModelError("", "Sorry. An unexpected error has occured. Please try again later");
-                return View();
+                return RedirectToAction(nameof(HomeController.Error), "Home");
             }
         }
 
@@ -366,7 +366,7 @@ namespace ConsumingAPI.Controllers
                     }
                 }
 
-                return View();
+                return RedirectToAction(nameof(HomeController.Error), "Home");
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
@@ -377,7 +377,7 @@ namespace ConsumingAPI.Controllers
             {
                 //Create a log for the error message
                 ModelState.AddModelError("", "Sorry. An unexpected error has occured. Please try again later");
-                return View();
+                return RedirectToAction(nameof(HomeController.Error), "Home");
             }
         }
 
@@ -417,7 +417,7 @@ namespace ConsumingAPI.Controllers
                         ModelState.AddModelError(key.Key, error);
                     }
                 }
-                return View();
+                return RedirectToAction(nameof(HomeController.Error), "Home");
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
@@ -428,7 +428,7 @@ namespace ConsumingAPI.Controllers
             {
                 //Create a log for the error message
                 ModelState.AddModelError("", "Sorry. An unexpected error has occured. Please try again later");
-                return View();
+                return RedirectToAction(nameof(HomeController.Error), "Home");
             }
         }
     }

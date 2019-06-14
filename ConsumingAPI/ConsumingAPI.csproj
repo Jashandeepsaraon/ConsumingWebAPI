@@ -154,6 +154,7 @@
     <Compile Include="Models\DisplayUsersViewModel.cs" />
     <Compile Include="Models\Domain\APIErroData.cs" />
     <Compile Include="Models\Domain\Households.cs" />
+    <Compile Include="Models\ErrorViewModel.cs" />
     <Compile Include="Models\InviteUsersViewModel.cs" />
     <Compile Include="Models\ForgotPasswordViewModel.cs" />
     <Compile Include="Models\HouseholdsViewModel.cs" />
@@ -269,6 +270,7 @@
     <Content Include="Views\Transaction\CreateTransaction.cshtml" />
     <Content Include="Views\Transaction\DisplayTransaction.cshtml" />
     <Content Include="Views\Transaction\EditTransaction.cshtml" />
+    <Content Include="Views\Home\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

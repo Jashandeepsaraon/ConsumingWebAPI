@@ -17,6 +17,12 @@ namespace ConsumingAPI.Controllers
         {
             return View();
         }
+
+        public ActionResult Error()
+        {
+            return View();
+        }
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -62,7 +68,7 @@ namespace ConsumingAPI.Controllers
             {
                 //Create a log for the error message
                 ModelState.AddModelError("", "Sorry. An unexpected error has occured. Please try again later");
-                return View();
+                return RedirectToAction("Error");
             }
         }
 
@@ -95,7 +101,7 @@ namespace ConsumingAPI.Controllers
             {
                 //Create a log for the error message
                 ModelState.AddModelError("", "Sorry. An unexpected error has occured. Please try again later");
-                return View();
+                return RedirectToAction("Error");
             }
         }
 
@@ -307,7 +313,7 @@ namespace ConsumingAPI.Controllers
                     }
                 }
 
-                return View(model);
+                return RedirectToAction("Error");
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
@@ -410,7 +416,7 @@ namespace ConsumingAPI.Controllers
                     }
                 }
 
-                return View(model);
+                return RedirectToAction("Error");
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
@@ -496,7 +502,7 @@ namespace ConsumingAPI.Controllers
                     }
                 }
 
-                return View();
+                return RedirectToAction("Error"); ;
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
@@ -507,7 +513,7 @@ namespace ConsumingAPI.Controllers
             {
                 //Create a log for the error message
                 ModelState.AddModelError("", "Sorry. An unexpected error has occured. Please try again later");
-                return View();
+                return RedirectToAction("Error");
             }
         }
 
@@ -549,7 +555,7 @@ namespace ConsumingAPI.Controllers
                     }
                 }
 
-                return View();
+                return RedirectToAction("Error");
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
@@ -560,7 +566,7 @@ namespace ConsumingAPI.Controllers
             {
                 //Create a log for the error message
                 ModelState.AddModelError("", "Sorry. An unexpected error has occured. Please try again later");
-                return View();
+                return RedirectToAction("Error");
             }
         }
 
@@ -602,7 +608,7 @@ namespace ConsumingAPI.Controllers
                     }
                 }
 
-                return View();
+                return RedirectToAction("Error");
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
@@ -613,7 +619,7 @@ namespace ConsumingAPI.Controllers
             {
                 //Create a log for the error message
                 ModelState.AddModelError("", "Sorry. An unexpected error has occured. Please try again later");
-                return View();
+                return RedirectToAction("Error");
             }
         }
     }
