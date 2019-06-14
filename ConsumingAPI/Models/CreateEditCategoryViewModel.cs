@@ -6,18 +6,14 @@ using System.Web;
 
 namespace ConsumingAPI.Models
 {
-    public class HouseholdsViewModel
+    public class CreateEditCategoryViewModel
     {
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
         public string Description { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime? DateUpdated { get; set; }
-        //public string OwnerId { get; set; }
-        
-        public int NumberOfUsers { get; set; }
-        public bool IsOwner { get; set; }
+        [Required]
+        public int HouseholdId { get; set; }
     }
 }

@@ -1,6 +1,6 @@
-﻿@model HouseholdsViewModel
+﻿@model CreateEditTransactionViewModel
 @{
-    ViewBag.Title = "EditHouseHold";
+    ViewBag.Title = "CreateTransaction";
     Layout = null;
 }
 
@@ -61,33 +61,47 @@
                 <input type="checkbox" id="drop" />
                 <ul class="menu">
                     <li class="mr-lg-4 mr-2 active"><a href="@Url.Action("Index","Home")">Home</a></li>
-                    <li class="mr-lg-4 mr-2"><a href="@Url.Action("GetAll","Home")">Household</a></li>
-                    <li class="mr-lg-4 mr-2"><a href="@Url.Action("Contact","Home")">Contact</a></li>
+                    <li class="mr-lg-4 mr-2"><a href="@Url.Action("DisplayCategory","Category")">Category</a></li>
+                    <li class="mr-lg-4 mr-2"><a href="@Url.Action("GetAll","Home")">Households</a></li>
+                    <li class=""><a href="@Url.Action("Contact","Home")">Contact</a></li>
                 </ul>
             </nav>
             <!-- //nav -->
         </div>
     </header>
     <div style="margin-left: 30px; text-align:center">
-        <h2 style="margin-left: 30px;">Edit HouseHold</h2>
+        <h2 style="margin-left: 30px;">Create New HouseHold</h2>
         <form method="post" enctype="multipart/form-data">
-
             @Html.ValidationSummary(true)
             <div class="form-group">
-                @Html.LabelFor(p => p.Name, "Name:")
-                @Html.TextBoxFor(input => input.Name, new { @class = "", placeholder = "Enter the Name" })
-                @Html.ValidationMessageFor(input => input.Name)
+                @Html.LabelFor(p => p.Title, "Title:")
+                @Html.TextBoxFor(input => input.Title, new { @class = "", placeholder = "Enter the Title" })
+                @Html.ValidationMessageFor(input => input.Title)
             </div>
             <div class="form-group">
                 @Html.LabelFor(p => p.Description, "Description:")
-                @Html.TextBoxFor(input => input.Description, new { @class = "", placeholder = "Enter the Name" })
+                @Html.TextBoxFor(input => input.Description, new { @class = "", placeholder = "Enter the Description" })
                 @Html.ValidationMessageFor(input => input.Description)
             </div>
-
-            <button type="submit" class="btn btn-default">Edit</button>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Amount, "Amount:")
+                @Html.TextBoxFor(input => input.Amount, new { @class = "", placeholder = "Enter the Value" })
+                @Html.ValidationMessageFor(input => input.Amount)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.TransactionDate, "TransactionDate:")
+                <input type="datetime-local" name="@nameof(Model.TransactionDate)" />
+                @Html.ValidationMessageFor(input => input.TransactionDate, "", new { @type = "date" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.CategoryList, "Category:")
+                @Html.DropDownListFor(input => input.CategoryId, Model.CategoryList)
+                @Html.ValidationMessageFor(input => input.CategoryList, "", new { @class = "text-danger" })
+            </div>
+            <button type="submit" class="btn btn-default">Create</button>
         </form>
         <div>
-            @Html.ActionLink("Back to List", "GetAll")
+            @Html.ActionLink("Back to List", "DisplayTransaction")
         </div>
     </div>
 </body>

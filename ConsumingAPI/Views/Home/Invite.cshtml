@@ -1,11 +1,11 @@
-﻿@model ForgotPasswordViewModel
+﻿@model InviteUsersViewModel
 @{
     ViewBag.Title = "InviteUsers";
 }
 
 <h2>InviteUsers</h2>
 
-@using (Html.BeginForm("InviteUsers", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("Invite", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     <h4>Enter your email.</h4>

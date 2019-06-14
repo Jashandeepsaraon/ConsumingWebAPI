@@ -27,7 +27,7 @@ namespace ConsumingAPI.Controllers
         [HttpPost]
         public ActionResult Login(LoginViewModel formdata)
         {
-            var url = "http://localhost:49995/token";
+            var url = "http://localhost:64310/token";
 
             var userName = formdata.UserName;
             var password = formdata.Password;
@@ -87,7 +87,7 @@ namespace ConsumingAPI.Controllers
             {
                 return View(model);
             }
-            var url = "http://localhost:49995/api/Account/Register";
+            var url = "http://localhost:64310/api/Account/Register";
 
             var email = model.Email;
             var password = model.Password;
@@ -149,7 +149,7 @@ namespace ConsumingAPI.Controllers
         [HttpPost]
         public ActionResult ChangePassword(ChangePasswordViewModel model)
         {
-            var url = "http://localhost:49995/api/Account/ChangePassword";
+            var url = "http://localhost:64310/api/Account/ChangePassword";
             var cookie = Request.Cookies["MyFirstCookie"];
             if (cookie == null)
             {
@@ -198,7 +198,7 @@ namespace ConsumingAPI.Controllers
         [HttpPost]
         public ActionResult ForgotPassword(ForgotPasswordViewModel model)
         {
-            var url = "http://localhost:49995/api/Account/ForgotPassword";
+            var url = "http://localhost:64310/api/Account/ForgotPassword";
             var httpClient = new HttpClient();
             var email = model.Email;
             var parameters = new List<KeyValuePair<string, string>>();

@@ -1,0 +1,95 @@
+﻿@model CreateEditHouseholdViewModel
+@{
+    ViewBag.Title = "EditHouseHold";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Household Budgeter</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="keywords" content=" Furnish Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template,
+    Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+
+    <script>
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+
+    <!-- css files -->
+    <link href="~/css/bootstrap.css" rel='stylesheet' type='text/css' /><!-- bootstrap css -->
+    <link href="~/css/style.css" rel='stylesheet' type='text/css' /><!-- custom css -->
+    <link href="~/css/font-awesome.min.css" rel="stylesheet"><!-- fontawesome css -->
+    <!-- //css files -->
+
+    <link href="~/css/css_slider.css" type="text/css" rel="stylesheet" media="all">
+
+    <!-- google fonts -->
+    <link href="//fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i&amp;subset=latin-ext" rel="stylesheet">
+    <!-- //google fonts -->
+
+</head>
+<body>
+    <!-- //header -->
+    <header class="py-sm-3 pt-3 pb-2" id="home">
+        <div class="container">
+            <!-- nav -->
+            <div class="top d-md-flex">
+                <div id="logo">
+                    <h1> <a href="@Url.Action("Index","Home")"><span class="fa fa-meetup"></span>Household</a></h1>
+                </div>
+                <div class="search-form mx-md-auto">
+                    <div class="n-right-w3ls">
+                        <form action="#" method="post" class="newsletter">
+                            <input class="search" type="text" placeholder="Search..." required="">
+                            <button class="form-control btn" value=""><span class="fa fa-search"></span></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <nav class="text-center">
+                <label for="drop" class="toggle"><span class="fa fa-bars"></span></label>
+                <input type="checkbox" id="drop" />
+                <ul class="menu">
+                    <li class="mr-lg-4 mr-2 active"><a href="@Url.Action("Index","Home")">Home</a></li>
+                    <li class="mr-lg-4 mr-2"><a href="@Url.Action("GetAll","Home")">Household</a></li>
+                    <li class="mr-lg-4 mr-2"><a href="@Url.Action("Contact","Home")">Contact</a></li>
+                </ul>
+            </nav>
+            <!-- //nav -->
+        </div>
+    </header>
+    <div style="margin-left: 30px; text-align:center">
+        <h2 style="margin-left: 30px;">Edit HouseHold</h2>
+        <form method="post" enctype="multipart/form-data">
+
+            @Html.ValidationSummary(true)
+            <div class="form-group">
+                @Html.LabelFor(p => p.Name, "Name:")
+                @Html.TextBoxFor(input => input.Name, new { @class = "", placeholder = "Enter the Name" })
+                @Html.ValidationMessageFor(input => input.Name)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Description, "Description:")
+                @Html.TextBoxFor(input => input.Description, new { @class = "", placeholder = "Enter the Description" })
+                @Html.ValidationMessageFor(input => input.Description)
+            </div>
+
+            <button type="submit" class="btn btn-default">Edit</button>
+        </form>
+        <div>
+            @Html.ActionLink("Back to List", "GetAll")
+        </div>
+    </div>
+</body>
+</html>
+

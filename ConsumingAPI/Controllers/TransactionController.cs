@@ -10,29 +10,15 @@ using System.Web.Mvc;
 
 namespace ConsumingAPI.Controllers
 {
-    public class HomeController : Controller
+    public class TransactionController : Controller
     {
-
         public ActionResult Index()
         {
             return View();
         }
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
 
         [HttpGet]
-        public ActionResult GetAll()
+        public ActionResult DisplayTransaction(int bankAccountId, int houseHoldId)
         {
             var cookie = Request.Cookies["MyFirstCookie"];
 
@@ -40,23 +26,23 @@ namespace ConsumingAPI.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-
+            ViewBag.BankAccountId = bankAccountId;
+            ViewBag.HouseHoldId = houseHoldId;
             var httpClient = new HttpClient();
 
             httpClient.DefaultRequestHeaders.Add("Authorization",
                 $"Bearer {cookie.Value}");
 
             var response = httpClient
-                .GetAsync("http://localhost:64310/api/household/view")
+                .GetAsync($"http://localhost:64310/api/Transaction/view/{bankAccountId}")
                 .Result;
-
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
 
-                var households = JsonConvert.DeserializeObject<List<HouseholdsViewModel>>(data);
+                var transactions = JsonConvert.DeserializeObject<List<TransactionViewModel>>(data);
 
-                return View(households);
+                return View(transactions);
             }
             else
             {
@@ -67,7 +53,7 @@ namespace ConsumingAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult DisplayUsers(int id)
+        public ActionResult CreateTransaction(int bankAccountId, int houseHoldId)
         {
             var cookie = Request.Cookies["MyFirstCookie"];
 
@@ -75,85 +61,56 @@ namespace ConsumingAPI.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-
+            var url = $"http://localhost:64310/api/Category/view/{houseHoldId}";
             var httpClient = new HttpClient();
 
             httpClient.DefaultRequestHeaders.Add("Authorization",
                 $"Bearer {cookie.Value}");
 
             var response = httpClient
-                .GetAsync("http://localhost:64310/api/household/ViewUsers/{id}")
+                .GetAsync(url)
                 .Result;
+            CreateEditTransactionViewModel model = null;
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
 
-                var users = JsonConvert.DeserializeObject<List<DisplayUsersViewModel>>(data);
-
-                return View(users);
-            }
-            else
-            {
-                //Create a log for the error message
-                ModelState.AddModelError("", "Sorry. An unexpected error has occured. Please try again later");
-                return View();
-            }
-        }
-
-        [HttpGet]
-        public ActionResult SingleHousehold(int id)
-        {
-            var cookie = Request.Cookies["MyFirstCookie"];
-
-            if (cookie == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var httpClient = new HttpClient();
-
-            httpClient.DefaultRequestHeaders.Add("Authorization",
-                $"Bearer {cookie.Value}");
-
-            var response = httpClient
-                .GetAsync($"http://localhost:64310/api/household/ViewById/{id}")
-                .Result;
-
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                var data = response.Content.ReadAsStringAsync().Result;
-
-                var result = JsonConvert.DeserializeObject<HouseholdsViewModel>(data);
-
-                if (!result.IsOwner)
+                var categories = JsonConvert.DeserializeObject<List<CategoryViewModel>>(data);
+                model = new CreateEditTransactionViewModel
                 {
-                    return RedirectToAction("Index");
+                    CategoryList = categories.Select(p => new SelectListItem
+                    {
+                        Text = p.Name,
+                        Value = p.Id.ToString()
+                    }).ToList()
+                };
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                var data = response.Content.ReadAsStringAsync().Result;
+
+                var errors = JsonConvert.DeserializeObject<APIErroData>(data);
+
+                foreach (var key in errors.ModelState)
+                {
+                    foreach (var error in key.Value)
+                    {
+                        ModelState.AddModelError(key.Key, error);
+                    }
                 }
-                return View(result);
             }
             else
             {
                 //Create a log for the error message
-                return RedirectToAction("Index");
-            }
-        }
-
-        [HttpGet]
-        public ActionResult Create()
-        {
-            var cookie = Request.Cookies["MyFirstCookie"];
-
-            if (cookie == null)
-            {
-                return RedirectToAction("Login", "Account");
+                ModelState.AddModelError("", "Sorry. An unexpected error has occured. Please try again later");
             }
 
-            return View();
+            return View(model);
         }
 
         [HttpPost]
-        public ActionResult Create(CreateEditHouseholdViewModel model)
+        public ActionResult CreateTransaction(int? bankAccountId,  int houseHoldId, CreateEditTransactionViewModel model)
         {
             var cookie = Request.Cookies["MyFirstCookie"];
 
@@ -170,9 +127,17 @@ namespace ConsumingAPI.Controllers
             var parameters = new List<KeyValuePair<string, string>>();
 
             parameters.Add(
-                new KeyValuePair<string, string>("Name", model.Name));
+                new KeyValuePair<string, string>("Title", model.Title));
             parameters.Add(
                 new KeyValuePair<string, string>("Description", model.Description));
+            parameters.Add(
+                new KeyValuePair<string, string>("Amount", Convert.ToString(model.Amount)));
+            parameters.Add(
+                new KeyValuePair<string, string>("TransactionDate", Convert.ToString(model.TransactionDate)));
+            parameters.Add(
+                new KeyValuePair<string, string>("BankAccountId", Convert.ToString(bankAccountId)));
+            parameters.Add(
+                new KeyValuePair<string, string>("CategoryId", Convert.ToString(model.CategoryId)));
 
             var encodedParameters = new FormUrlEncodedContent(parameters);
 
@@ -182,13 +147,13 @@ namespace ConsumingAPI.Controllers
                 $"Bearer {cookie.Value}");
 
             var response = httpClient
-                .PostAsync("http://localhost:64310/api/household/create",
+                .PostAsync("http://localhost:64310/api/Transaction/create",
                     encodedParameters)
                 .Result;
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("DisplayTransaction", new { bankAccountId, houseHoldId });
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
@@ -215,7 +180,7 @@ namespace ConsumingAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult Edit(int id)
+        public ActionResult EditTransaction(int id, int houseHoldId)
         {
             var cookie = Request.Cookies["MyFirstCookie"];
 
@@ -230,35 +195,46 @@ namespace ConsumingAPI.Controllers
                 $"Bearer {cookie.Value}");
 
             var response = httpClient
-                .GetAsync($"http://localhost:64310/api/household/ViewById/{id}")
+                .GetAsync($"http://localhost:64310/api/Transaction/ViewById/{id}")
                 .Result;
-
+            var a = response.Content.ReadAsStringAsync().Result;
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
 
-                var result = JsonConvert.DeserializeObject<HouseholdsViewModel>(data);
+                var result = JsonConvert.DeserializeObject<TransactionViewModel>(data);
+                var categoriesResponse = httpClient
+                .GetAsync($"http://localhost:64310/api/Category/view/{houseHoldId}")
+                .Result;
+                var categoriesData = categoriesResponse.Content.ReadAsStringAsync().Result;
+                var categories = JsonConvert.DeserializeObject<List<CategoryViewModel>>(categoriesData);
+                
+                //if (!result.IsOwner)
+                //{
+                //    return RedirectToAction(nameof(HomeController.Index), "Home");
+                //}
 
-                if (!result.IsOwner)
-                {
-                    return RedirectToAction("Index");
-                }
-
-                var editViewModel = new CreateEditHouseholdViewModel();
-                editViewModel.Name = result.Name;
+                var editViewModel = new CreateEditTransactionViewModel();
+                editViewModel.Title = result.Title;
                 editViewModel.Description = result.Description;
-                editViewModel.DateUpdated = DateTime.Now;
+                editViewModel.TransactionDate = result.TransactionDate;
+                editViewModel.Amount = result.Amount;
+                editViewModel.CategoryList = categories.Select(p => new SelectListItem
+                {
+                    Text = p.Name,
+                    Value = p.Id.ToString()
+                }).ToList();
                 return View(editViewModel);
             }
             else
             {
                 //Create a log for the error message
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(HomeController.Index), "Home");
             }
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, CreateEditHouseholdViewModel model)
+        public ActionResult EditTransaction(int id, int houseHoldId, int bankAccountId, CreateEditTransactionViewModel model)
         {
             var cookie = Request.Cookies["MyFirstCookie"];
 
@@ -275,113 +251,17 @@ namespace ConsumingAPI.Controllers
             var parameters = new List<KeyValuePair<string, string>>();
 
             parameters.Add(
-                new KeyValuePair<string, string>("Name", model.Name));
+                new KeyValuePair<string, string>("Title", model.Title));
             parameters.Add(
                 new KeyValuePair<string, string>("Description", model.Description));
-
-            var encodedParameters = new FormUrlEncodedContent(parameters);
-
-            var httpClient = new HttpClient();
-
-            httpClient.DefaultRequestHeaders.Add("Authorization",
-                $"Bearer {cookie.Value}");
-
-            var response = httpClient
-                .PostAsync($"http://localhost:64310/api/household/edit/{id}",
-                    encodedParameters)
-                .Result;
-
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                return RedirectToAction("Index");
-            }
-            else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-            {
-                var data = response.Content.ReadAsStringAsync().Result;
-
-                var errors = JsonConvert.DeserializeObject<APIErroData>(data);
-
-                foreach (var key in errors.ModelState)
-                {
-                    foreach (var error in key.Value)
-                    {
-                        ModelState.AddModelError(key.Key, error);
-                    }
-                }
-
-                return View(model);
-            }
-            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-            {
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                //Create a log for the error message
-                ModelState.AddModelError("", "Sorry. An unexpected error has occured. Please try again later");
-                return View(model);
-            }
-        }
-
-        [HttpGet]
-        public ActionResult Invite(int id)
-        {
-            var cookie = Request.Cookies["MyFirstCookie"];
-
-            if (cookie == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var httpClient = new HttpClient();
-
-            httpClient.DefaultRequestHeaders.Add("Authorization",
-                $"Bearer {cookie.Value}");
-
-            var response = httpClient
-                .GetAsync($"http://localhost:64310/api/household/ViewById/{id}")
-                .Result;
-
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                var data = response.Content.ReadAsStringAsync().Result;
-
-                var result = JsonConvert.DeserializeObject<HouseholdsViewModel>(data);
-
-                if (!result.IsOwner)
-                {
-                    return RedirectToAction("Index");
-                }
-
-                return View();
-            }
-            else
-            {
-                //Create a log for the error message
-                return RedirectToAction("Index");
-            }
-        }
-
-        [HttpPost]
-        public ActionResult Invite(int id, InviteUsersViewModel model)
-        {
-            var cookie = Request.Cookies["MyFirstCookie"];
-
-            if (cookie == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            var parameters = new List<KeyValuePair<string, string>>();
-
             parameters.Add(
-                new KeyValuePair<string, string>("Email", model.Email));
-
+                new KeyValuePair<string, string>("BankAccountId", Convert.ToString(model.BankAccountId)));
+            parameters.Add(
+                new KeyValuePair<string, string>("CategoryId", Convert.ToString(model.CategoryId)));
+            parameters.Add(
+                new KeyValuePair<string, string>("Amount", Convert.ToString(model.Amount)));
+            parameters.Add(
+                new KeyValuePair<string, string>("TransactionDate", Convert.ToString(model.TransactionDate)));
             var encodedParameters = new FormUrlEncodedContent(parameters);
 
             var httpClient = new HttpClient();
@@ -390,13 +270,13 @@ namespace ConsumingAPI.Controllers
                 $"Bearer {cookie.Value}");
 
             var response = httpClient
-                .PostAsync($"http://localhost:64310/api/household/invite/{id}",
+                .PostAsync($"http://localhost:64310/api/Transaction/edit/{id}",
                     encodedParameters)
                 .Result;
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("DisplayTransaction", new { bankAccountId, houseHoldId });
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
@@ -416,153 +296,13 @@ namespace ConsumingAPI.Controllers
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(HomeController.Index), "Home");
             }
             else
             {
                 //Create a log for the error message
                 ModelState.AddModelError("", "Sorry. An unexpected error has occured. Please try again later");
                 return View(model);
-            }
-        }
-
-        [HttpGet]
-        public ActionResult Join()
-        {
-            var cookie = Request.Cookies["MyFirstCookie"];
-
-            if (cookie == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var httpClient = new HttpClient();
-
-            httpClient.DefaultRequestHeaders.Add("Authorization",
-                $"Bearer {cookie.Value}");
-
-            var response = httpClient
-                .GetAsync($"http://localhost:64310/api/household/getinvites")
-                .Result;
-
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                var data = response.Content.ReadAsStringAsync().Result;
-
-                var result = JsonConvert.DeserializeObject<List<InviteViewModel>>(data);
-
-                return View(result);
-            }
-            else
-            {
-                //Create a log for the error message
-                return RedirectToAction("Index");
-            }
-        }
-
-        [HttpPost]
-        public ActionResult Join(int id)
-        {
-            var cookie = Request.Cookies["MyFirstCookie"];
-
-            if (cookie == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var httpClient = new HttpClient();
-
-            httpClient.DefaultRequestHeaders.Add("Authorization",
-                $"Bearer {cookie.Value}");
-
-            var response = httpClient
-                .PostAsync($"http://localhost:64310/api/household/join/{id}",
-                    null)
-                .Result;
-
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                return RedirectToAction("Index");
-            }
-            else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-            {
-                var data = response.Content.ReadAsStringAsync().Result;
-
-                var errors = JsonConvert.DeserializeObject<APIErroData>(data);
-
-                foreach (var key in errors.ModelState)
-                {
-                    foreach (var error in key.Value)
-                    {
-                        ModelState.AddModelError(key.Key, error);
-                    }
-                }
-
-                return View();
-            }
-            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-            {
-                TempData["Message"] = "It looks like this household was deleted";
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                //Create a log for the error message
-                ModelState.AddModelError("", "Sorry. An unexpected error has occured. Please try again later");
-                return View();
-            }
-        }
-
-        [HttpPost]
-        public ActionResult Leave(int id)
-        {
-            var cookie = Request.Cookies["MyFirstCookie"];
-
-            if (cookie == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var httpClient = new HttpClient();
-
-            httpClient.DefaultRequestHeaders.Add("Authorization",
-                $"Bearer {cookie.Value}");
-
-            var response = httpClient
-                .PostAsync($"http://localhost:64310/api/household/leave/{id}",
-                    null)
-                .Result;
-
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                return RedirectToAction("Index");
-            }
-            else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
-            {
-                var data = response.Content.ReadAsStringAsync().Result;
-
-                var errors = JsonConvert.DeserializeObject<APIErroData>(data);
-
-                foreach (var key in errors.ModelState)
-                {
-                    foreach (var error in key.Value)
-                    {
-                        ModelState.AddModelError(key.Key, error);
-                    }
-                }
-
-                return View();
-            }
-            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-            {
-                TempData["Message"] = "It looks like this household was deleted";
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                //Create a log for the error message
-                ModelState.AddModelError("", "Sorry. An unexpected error has occured. Please try again later");
-                return View();
             }
         }
 
@@ -581,13 +321,13 @@ namespace ConsumingAPI.Controllers
                 $"Bearer {cookie.Value}");
 
             var response = httpClient
-                .PostAsync($"http://localhost:64310/api/household/Delete/{id}",
+                .PostAsync($"http://localhost:64310/api/Transaction/Delete/{id}",
                     null).Result;
-
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+                //return RedirectToAction("DisplayTransaction", new { ViewBag.BankAccountId, houseHoldId });
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
@@ -607,8 +347,59 @@ namespace ConsumingAPI.Controllers
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                TempData["Message"] = "It looks like the Household is not found";
-                return RedirectToAction("Index");
+                TempData["Message"] = "It looks like the Transaction is not found";
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+            else
+            {
+                //Create a log for the error message
+                ModelState.AddModelError("", "Sorry. An unexpected error has occured. Please try again later");
+                return View();
+            }
+        }
+
+        public ActionResult Void(int id)
+        {
+            var cookie = Request.Cookies["MyFirstCookie"];
+
+            if (cookie == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var httpClient = new HttpClient();
+
+            httpClient.DefaultRequestHeaders.Add("Authorization",
+                $"Bearer {cookie.Value}");
+
+            var response = httpClient
+                .PostAsync($"http://localhost:64310/api/Transaction/Void/{id}",
+                    null).Result;
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                var data = response.Content.ReadAsStringAsync().Result;
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+                //return RedirectToAction("DisplayTransaction", new { ViewBag.BankAccountId, houseHoldId });
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                var data = response.Content.ReadAsStringAsync().Result;
+
+                var errors = JsonConvert.DeserializeObject<APIErroData>(data);
+
+                foreach (var key in errors.ModelState)
+                {
+                    foreach (var error in key.Value)
+                    {
+                        ModelState.AddModelError(key.Key, error);
+                    }
+                }
+                return View();
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                TempData["Message"] = "It looks like the Transaction is not found";
+                return RedirectToAction(nameof(HomeController.Index), "Home");
             }
             else
             {

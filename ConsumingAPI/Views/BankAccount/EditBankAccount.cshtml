@@ -1,6 +1,6 @@
-﻿@model HouseholdsViewModel
+﻿@model CreateEditBankAccountViewModel
 @{
-    ViewBag.Title = "CreateHouseHold";
+    ViewBag.Title = "EditBankAccount";
     Layout = null;
 }
 
@@ -62,32 +62,32 @@
                 <ul class="menu">
                     <li class="mr-lg-4 mr-2 active"><a href="@Url.Action("Index","Home")">Home</a></li>
                     <li class="mr-lg-4 mr-2"><a href="@Url.Action("GetAll","Home")">Household</a></li>
-                    <li class="mr-lg-4 mr-2"><a href="@Url.Action("EditHouseHold","Home")">Edit</a></li>
-                    <li class=""><a href="@Url.Action("Contact","Home")">Contact</a></li>
+                    <li class="mr-lg-4 mr-2"><a href="@Url.Action("Contact","Home")">Contact</a></li>
                 </ul>
             </nav>
             <!-- //nav -->
         </div>
     </header>
     <div style="margin-left: 30px; text-align:center">
-        <h2 style="margin-left: 30px;">Create New HouseHold</h2>
+        <h2 style="margin-left: 30px;">Edit HouseHold</h2>
         <form method="post" enctype="multipart/form-data">
+
             @Html.ValidationSummary(true)
-            <div class="form-group" >
+            <div class="form-group">
                 @Html.LabelFor(p => p.Name, "Name:")
                 @Html.TextBoxFor(input => input.Name, new { @class = "", placeholder = "Enter the Name" })
                 @Html.ValidationMessageFor(input => input.Name)
             </div>
             <div class="form-group">
                 @Html.LabelFor(p => p.Description, "Description:")
-                @Html.TextBoxFor(input => input.Description, new { @class = "", placeholder = "Enter the Name" })
+                @Html.TextBoxFor(input => input.Description, new { @class = "", placeholder = "Enter the Description" })
                 @Html.ValidationMessageFor(input => input.Description)
             </div>
 
-            <button type="submit" class="btn btn-default">Create</button>
+            <button type="submit" class="btn btn-default">Edit</button>
         </form>
         <div>
-            @Html.ActionLink("Back to List", "GetAll")
+            @Html.ActionLink("Back to List", "DisplayBankAccount")
         </div>
     </div>
 </body>
