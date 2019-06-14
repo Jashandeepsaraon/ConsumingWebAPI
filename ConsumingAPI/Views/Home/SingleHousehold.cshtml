@@ -6,6 +6,10 @@
 <div>
     <section class="section-padding wow fadeInUp delay-05s">
         <div class="container" style="margin-left: 10px;">
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Message"]</div>
+            }
             <div class="row">
                 <div class="col-md-12 text-center">
                     <h2 class="service-title pad-bt15">Latest HouseHold</h2>
@@ -21,12 +25,12 @@
                             <th>Leave</th>
                             <th>Category</th>
                             <th>BankAccount</th>
-                            
+
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>@Model.Name</td>            
+                            <td>@Model.Name</td>
                             <td>
                                 @if (Model.IsOwner)
                                 {
@@ -36,7 +40,7 @@
                             </td>
                             <td>
                                 <a href="@Url.Action("Invite", "Home", new { id = Model.Id })">Invite Users</a>
-                            </td>                           
+                            </td>
                             <td>
                                 <form action="@Url.Action("DisplayUsers", "Home", new { id = Model.Id })">
                                     <button>Users</button>
@@ -53,7 +57,7 @@
                             <td>
                                 <a href="@Url.Action("DisplayBankAccount", "BankAccount", new { id = Model.Id })">BankAccount</a>
                             </td>
-                            
+
                         </tr>
                     </tbody>
                 </table>
