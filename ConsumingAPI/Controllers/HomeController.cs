@@ -82,15 +82,13 @@ namespace ConsumingAPI.Controllers
                 $"Bearer {cookie.Value}");
 
             var response = httpClient
-                .GetAsync("http://localhost:64310/api/household/ViewUsers/{id}")
+                .GetAsync($"http://localhost:64310/api/household/ViewUsers/{id}")
                 .Result;
 
+                var data = response.Content.ReadAsStringAsync().Result;
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                var data = response.Content.ReadAsStringAsync().Result;
-
-                var users = JsonConvert.DeserializeObject<List<DisplayUsersViewModel>>(data);
-
+                var users = JsonConvert.DeserializeObject<List<DisplayUsersViewModel>>(data);     
                 return View(users);
             }
             else
@@ -587,7 +585,8 @@ namespace ConsumingAPI.Controllers
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
-                return RedirectToAction("Index");
+                TempData["Message"] = "You Successfully deleted the HouseHold";
+                return RedirectToAction("GetAll");
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {

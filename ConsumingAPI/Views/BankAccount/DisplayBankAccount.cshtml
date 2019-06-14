@@ -6,64 +6,72 @@
 <div>
     <section class="section-padding wow fadeInUp delay-05s">
         <div class="container" style="margin-left: 10px;">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h2 class="service-title pad-bt15">Latest Bank Accounts</h2>
-                    <hr class="bottom-line">
-                </div>
-                <a href="@Url.Action("CreateBankAccount","BankAccount", new { id = ViewBag.HouseHoldId})">+ Create New</a>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Balance</th>
-                            <th>DateCreated</th>
-                            <th>DateUpdated</th>
-                            <th>Edit</th>
-                            @*<th>Users List</th>*@
-                            <th>Delete</th>
-                            <th>Transaction</th>
-                            <th>UpdateBalance</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var record in Model)
-                        {
+            @if (Model == null || !Model.Any())
+            {
+                <h3>There is no Bank Account to display.</h3>
+                <a href="@Url.Action("CreateBankAccount", "BankAccount", new { id = ViewBag.HouseHoldId })">+ Create New</a>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h2 class="service-title pad-bt15">Latest Bank Accounts</h2>
+                        <hr class="bottom-line">
+                    </div>
+                    <a href="@Url.Action("CreateBankAccount", "BankAccount", new { id = ViewBag.HouseHoldId })">+ Create New</a>
+                    <table class="table table-striped">
+                        <thead>
                             <tr>
-                                <td>@record.Name</td>
-                                <td>@record.Description</td>
-                                <td>@record.Balance</td>
-                                <td>@record.DateCreated</td>
-                                <td>@record.DateUpdated</td>
-
-                                @*<td>
-                                        <form action="@Url.Action("DisplayUsers", "Home", new { id = record.Id })">
-                                            <button>Users</button>
-                                        </form>
-                                    </td>*@
-                                @*@if (record.)
-                                    {*@
-                                <td>
-                                    <a href="@Url.Action("EditBankAccount", "BankAccount", new { id = record.Id })">Edit</a>
-                                </td>
-                                <td>
-                                    <form method="post" action="@Url.Action("Delete", "BankAccount", new { id = record.Id })">
-                                        <button>Delete</button>
-                                    </form>
-                                </td>
-                                @*}*@
-                                <td>
-                                    <a href="@Url.Action("DisplayTransaction", "Transaction", new { bankAccountId = record.Id, houseHoldId = ViewBag.HouseHoldId })">Transaction</a>
-                                </td>
-                                <td>
-                                    <a href="@Url.Action("UpdateBalance", "BankAccount", new { id = record.Id})">UpdateBalance</a>
-                                </td>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Balance</th>
+                                <th>DateCreated</th>
+                                <th>DateUpdated</th>
+                                <th>Edit</th>
+                                @*<th>Users List</th>*@
+                                <th>Delete</th>
+                                <th>Transaction</th>
+                                <th>UpdateBalance</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            @foreach (var record in Model)
+                            {
+                                <tr>
+                                    <td>@record.Name</td>
+                                    <td>@record.Description</td>
+                                    <td>@record.Balance</td>
+                                    <td>@record.DateCreated</td>
+                                    <td>@record.DateUpdated</td>
+
+                                    @*<td>
+                                            <form action="@Url.Action("DisplayUsers", "Home", new { id = record.Id })">
+                                                <button>Users</button>
+                                            </form>
+                                        </td>*@
+                                    @*@if (record.)
+                                        {*@
+                                    <td>
+                                        <a href="@Url.Action("EditBankAccount", "BankAccount", new { id = record.Id })">Edit</a>
+                                    </td>
+                                    <td>
+                                        <form method="post" action="@Url.Action("Delete", "BankAccount", new { id = record.Id })">
+                                            <button>Delete</button>
+                                        </form>
+                                    </td>
+                                    @*}*@
+                                    <td>
+                                        <a href="@Url.Action("DisplayTransaction", "Transaction", new { bankAccountId = record.Id, houseHoldId = ViewBag.HouseHoldId })">Transaction</a>
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("UpdateBalance", "BankAccount", new { id = record.Id })">UpdateBalance</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
         </div>
     </section>
 </div>

@@ -119,7 +119,7 @@ namespace ConsumingAPI.Controllers
                         ModelState.AddModelError(key.Key, error);
                     }
                 }
-
+                TempData["Message"] = "You are not Owner of this HousHold.";
                 return View(model);
             }
             else

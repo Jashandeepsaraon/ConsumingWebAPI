@@ -121,6 +121,28 @@ namespace ConsumingAPI.Controllers
 
             if (!ModelState.IsValid)
             {
+                var url = $"http://localhost:64310/api/Category/view/{houseHoldId}";
+                var httpClient1 = new HttpClient();
+
+                httpClient1.DefaultRequestHeaders.Add("Authorization",
+                    $"Bearer {cookie.Value}");
+
+                var response1 = httpClient1
+                    .GetAsync(url)
+                    .Result;
+
+                if (response1.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    var data = response1.Content.ReadAsStringAsync().Result;
+
+                    var categories = JsonConvert.DeserializeObject<List<CategoryViewModel>>(data);
+                    model.CategoryList = categories.Select(p => new SelectListItem
+                    {
+                        Text = p.Name,
+                        Value = p.Id.ToString()
+                    }).ToList();
+                    
+                }
                 return View(model);
             }
 
