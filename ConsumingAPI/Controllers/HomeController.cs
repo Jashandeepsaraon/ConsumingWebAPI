@@ -313,7 +313,7 @@ namespace ConsumingAPI.Controllers
                     }
                 }
 
-                return RedirectToAction("Error");
+                return View(model);
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
@@ -420,7 +420,7 @@ namespace ConsumingAPI.Controllers
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                return RedirectToAction("Index");
+                return View(model);
             }
             else
             {
