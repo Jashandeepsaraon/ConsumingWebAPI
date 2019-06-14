@@ -446,7 +446,7 @@ namespace ConsumingAPI.Controllers
                 $"Bearer {cookie.Value}");
 
             var response = httpClient
-                .GetAsync($"http://localhost:64310/api/household/Join")
+                .GetAsync($"http://localhost:64310/api/household/GetInvites")
                 .Result;
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
