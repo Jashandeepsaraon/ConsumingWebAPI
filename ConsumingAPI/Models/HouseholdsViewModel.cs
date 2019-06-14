@@ -15,8 +15,6 @@ namespace ConsumingAPI.Models
         public string Description { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime? DateUpdated { get; set; }
-        //public string OwnerId { get; set; }
-        
         public int NumberOfUsers { get; set; }
         public bool IsOwner { get; set; }
     }

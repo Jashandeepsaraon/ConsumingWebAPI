@@ -440,7 +440,7 @@ namespace ConsumingAPI.Controllers
                 $"Bearer {cookie.Value}");
 
             var response = httpClient
-                .GetAsync($"http://localhost:64310/api/household/getinvites")
+                .GetAsync($"http://localhost:64310/api/household/Join")
                 .Result;
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
@@ -477,10 +477,10 @@ namespace ConsumingAPI.Controllers
                 .PostAsync($"http://localhost:64310/api/household/join/{id}",
                     null)
                 .Result;
-
+            var data1 = response.Content.ReadAsStringAsync().Result;
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Join", new { id = id });
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {

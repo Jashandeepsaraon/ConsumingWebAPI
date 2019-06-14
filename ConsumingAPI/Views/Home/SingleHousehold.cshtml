@@ -17,7 +17,6 @@
                             <th>Name</th>
                             <th>Edit</th>
                             <th>InviteUsers</th>
-                            <th>Join household</th>
                             <th>Users List</th>
                             <th>Leave</th>
                             <th>Category</th>
@@ -27,18 +26,17 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>@Model.Name</td>
+                            <td>@Model.Name</td>            
                             <td>
-                                <a href="@Url.Action("Edit", "Home", new { id = Model.Id })">Edit</a>
+                                @if (Model.IsOwner)
+                                {
+                                    <a href="@Url.Action("Edit", "Home", new { id = Model.Id })">Edit</a>
+
+                                }
                             </td>
                             <td>
                                 <a href="@Url.Action("Invite", "Home", new { id = Model.Id })">Invite Users</a>
-                            </td>
-                            <td>
-                                <form method="post" action="@Url.Action("Join", "Home", new { id = Model.Id })">
-                                    <button>Join HouseHold</button>
-                                </form>
-                            </td>
+                            </td>                           
                             <td>
                                 <form action="@Url.Action("DisplayUsers", "Home", new { id = Model.Id })">
                                     <button>Users</button>

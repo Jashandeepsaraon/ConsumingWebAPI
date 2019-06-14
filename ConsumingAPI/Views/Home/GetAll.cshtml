@@ -31,6 +31,7 @@
                                 <th>DateCreated</th>
                                 <th>DateUpdated</th>
                                 <th>Delete</th>
+                                <th>Join HouseHold</th>
                                 <th>Details</th>
                             </tr>
                         </thead>
@@ -43,14 +44,23 @@
                                     <td>@record.DateCreated</td>
                                     <td>@record.DateUpdated</td>
                                     <td>
-                                        <form method="post" action="@Url.Action("Delete", "Home", new { id = record.Id })">
-                                            <button>Delete</button>
+                                        @if (record.IsOwner)
+                                        {
+                                            <form method="post" action="@Url.Action("Delete", "Home", new { id = record.Id })">
+                                                <button>Delete</button>
+                                            </form>
+                                        }
+                                    </td>
+                                    <td>
+                                        <form method="post" action="@Url.Action("Join", "Home", new { id = record.Id })">
+                                            <button>Join HouseHold</button>
                                         </form>
                                     </td>
                                     <td>
                                         <a href="@Url.Action("SingleHouseHold", "Home", new { id = record.Id })">Details</a>
                                     </td>
                                 </tr>
+
                             }
                         </tbody>
                     </table>
