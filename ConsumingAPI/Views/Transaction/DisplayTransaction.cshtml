@@ -6,11 +6,15 @@
 <div>
     <section class="section-padding wow fadeInUp delay-05s">
         <div class="container" style="margin-left: 10px;">
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Message"]</div>
+            }
             @if (Model == null || !Model.Any())
-             {
+            {
                 <h3>There is no Transaction to display.</h3>
                 <a href="@Url.Action("CreateTransaction", "Transaction", new { bankAccountId = ViewBag.BankAccountId, houseHoldId = ViewBag.HouseHoldId })">+ Create New</a>
-             }
+            }
             else
             {
                 <div class="row">
@@ -48,10 +52,10 @@
                                         <a href="@Url.Action("EditTransaction", "Transaction", new { id = record.Id, bankAccountId = ViewBag.BankAccountId, houseHoldId = ViewBag.HouseHoldId })">Edit</a>
                                     </td>
                                     @*<td>
-                                            <form action="@Url.Action("DisplayUsers", "Home", new { id = record.Id })">
-                                                <button>Users</button>
-                                            </form>
-                                        </td>*@
+                                    <form action="@Url.Action("DisplayUsers", "Home", new { id = record.Id })">
+                                        <button>Users</button>
+                                    </form>
+                                </td>*@
                                     <td>
                                         @if (record.IsVoided == false)
                                         {

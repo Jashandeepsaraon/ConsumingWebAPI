@@ -6,6 +6,10 @@
 <div>
     <section class="section-padding wow fadeInUp delay-05s">
         <div class="container" style="margin-left: 10px;">
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Message"]</div>
+            }
             @if (Model == null || !Model.Any())
             {
                 <h3>There is no Bank Account to display.</h3>
@@ -45,12 +49,12 @@
                                     <td>@record.DateUpdated</td>
 
                                     @*<td>
-                                            <form action="@Url.Action("DisplayUsers", "Home", new { id = record.Id })">
-                                                <button>Users</button>
-                                            </form>
-                                        </td>*@
+                                    <form action="@Url.Action("DisplayUsers", "Home", new { id = record.Id })">
+                                        <button>Users</button>
+                                    </form>
+                                </td>*@
                                     @*@if (record.)
-                                        {*@
+                                {*@
                                     <td>
                                         <a href="@Url.Action("EditBankAccount", "BankAccount", new { id = record.Id })">Edit</a>
                                     </td>

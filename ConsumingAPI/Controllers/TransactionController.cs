@@ -348,6 +348,7 @@ namespace ConsumingAPI.Controllers
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
+                TempData["Message"] = "You Successfully deleted the Transaction";
                 return RedirectToAction(nameof(HomeController.Index), "Home");
                 //return RedirectToAction("DisplayTransaction", new { ViewBag.BankAccountId, houseHoldId });
             }

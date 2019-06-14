@@ -6,6 +6,10 @@
 <div>
     <section class="section-padding wow fadeInUp delay-05s">
         <div class="container" style="margin-left: 10px;">
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Message"]</div>
+            }
             @if (Model == null || !Model.Any())
             {
                 <h3>There is no Category yet.</h3>
@@ -19,7 +23,7 @@
                         <hr class="bottom-line">
                     </div>
                     @*@if (Model.FirstOrDefault().IsOwner)
-                   {*@
+                {*@
                     <a href="@Url.Action("CreateCategory", "Category", new { id = ViewBag.HouseHoldId })">+ Create New</a>
                     @*}*@
                     <table class="table table-striped">
@@ -44,12 +48,12 @@
                                     <td>@record.DateUpdated</td>
 
                                     @*<td>
-                            <form action="@Url.Action("DisplayUsers", "Home", new { id = record.Id })">
-                                <button>Users</button>
-                            </form>
-                        </td>*@
+                                    <form action="@Url.Action("DisplayUsers", "Home", new { id = record.Id })">
+                                        <button>Users</button>
+                                    </form>
+                                </td>*@
                                     @*@if (record.IsOwner)
-                        {*@
+                                {*@
                                     <td>
                                         <a href="@Url.Action("EditCategory", "Category", new { id = record.Id })">Edit</a>
                                     </td>

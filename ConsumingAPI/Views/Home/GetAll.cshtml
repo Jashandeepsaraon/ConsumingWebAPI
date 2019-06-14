@@ -6,44 +6,56 @@
 <div>
     <section class="section-padding wow fadeInUp delay-05s">
         <div class="container" style="margin-left: 10px;">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <h2 class="service-title pad-bt15">Latest HouseHold</h2>
-                    <hr class="bottom-line">
-                </div>
-                <a href="@Url.Action("Create","Home")">+ Create New</a>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>DateCreated</th>
-                            <th>DateUpdated</th>
-                            <th>Delete</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var record in Model)
-                        {
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Message"]</div>
+            }
+            @if (Model == null || !Model.Any())
+            {
+                <h3>There is no HouseHold yet.</h3>
+                <a href="@Url.Action("Create", "Home")">+ Create New</a>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h2 class="service-title pad-bt15">Latest HouseHold</h2>
+                        <hr class="bottom-line">
+                    </div>
+                    <a href="@Url.Action("Create", "Home")">+ Create New</a>
+                    <table class="table table-striped">
+                        <thead>
                             <tr>
-                                <td>@record.Name</td>
-                                <td>@record.Description</td>
-                                <td>@record.DateCreated</td>
-                                <td>@record.DateUpdated</td>
-                                <td>
-                                    <form method="post" action="@Url.Action("Delete", "Home", new { id = record.Id })">
-                                        <button>Delete</button>
-                                    </form>
-                                </td>
-                                <td>
-                                    <a href="@Url.Action("SingleHouseHold", "Home", new { id = record.Id })">Details</a>
-                                </td>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>DateCreated</th>
+                                <th>DateUpdated</th>
+                                <th>Delete</th>
+                                <th>Details</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            @foreach (var record in Model)
+                            {
+                                <tr>
+                                    <td>@record.Name</td>
+                                    <td>@record.Description</td>
+                                    <td>@record.DateCreated</td>
+                                    <td>@record.DateUpdated</td>
+                                    <td>
+                                        <form method="post" action="@Url.Action("Delete", "Home", new { id = record.Id })">
+                                            <button>Delete</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("SingleHouseHold", "Home", new { id = record.Id })">Details</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
         </div>
     </section>
 </div>

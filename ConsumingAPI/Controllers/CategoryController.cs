@@ -257,6 +257,7 @@ namespace ConsumingAPI.Controllers
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
+                TempData["Message"] = "You Successfully deleted the Category";
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
